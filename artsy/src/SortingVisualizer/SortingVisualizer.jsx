@@ -1,5 +1,4 @@
 import React from 'react';
-import {getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
 import './SortingVisualizer.css';
 import Sketch from "react-p5";
 import ReactDOM from 'react-dom';
@@ -50,7 +49,7 @@ export default class SortingVisualizer extends React.Component {
     }
     this.setState({array});
   }
-
+/*
   mergeSort() {
     const animations = getMergeSortAnimations(this.state.array);
     for (let i = 0; i < animations.length; i++) {
@@ -73,8 +72,7 @@ export default class SortingVisualizer extends React.Component {
         }, i * ANIMATION_SPEED_MS);
       }
     }
-  }
-
+*/
   quickSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
@@ -86,7 +84,7 @@ export default class SortingVisualizer extends React.Component {
   bubbleSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
-
+/*
   // NOTE: This method will only work if your sorting algorithms actually return
   // the sorted arrays; if they return the animations (as they currently do), then
   // this method will be broken.
@@ -102,61 +100,63 @@ export default class SortingVisualizer extends React.Component {
       console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
     }
   }
+*/
+
+
   render() {
+    let values = [];
+
+    let i = 0;
+    let j = 0;
+    let bubble_draw = p5 => {
+      p5.background(0);
+      if (i < values.length) {
+        for (let j = 0; j < (values.length) - i - 1; j++) {
+          let a = values[j];
+          let b = values[j + 1];
+          if (a > b) {
+            swap(values, j, j + 1);
+          }
+        }
+      } else {
+        console.log("finished");
+        p5.noLoop();
+      }
+      //we're on the jth rectangle
+      for (let j = 0; j < values.length; j++) {
+        if (j == values.length - i)
+        {
+          p5.fill('red');
+        }
+        else if (j > values.length - i - 1)
+        {
+          p5.fill('green');
+        }
+        else {
+          p5.fill('white');
+        }
+        p5.rect(fat * j, p5.height - values[j], fat, values[j]);
+      }
+      i++;
+    };
     function swap(arr, a, b) {
       let temp = arr[a];
       arr[a] = arr[b];
       arr[b] = temp;
     }
-    const {array} = this.state;
-    let values = [];
-
-    let i = 0;
-    let j = 0;
     let fat = 7.5;
     return (
       <div className="array-container">
         <Sketch
 					setup={(p5, parentRef) => {
             p5.createCanvas(p5.windowWidth, p5.windowHeight);
-            values = new Array(Math.floor(p5.width / fat));
+            values = new Array(Math.floor(p5.width / fat * 0.75));
             for (let i = 0; i < values.length; i++) {
               values[i] = p5.random(p5.height);
               //values[i] = noise(i/100.0)*height;
             }
 					}}
-					draw={p5 => {
-            p5.background(0);
-            if (i < values.length) {
-              for (let j = 0; j < (values.length) - i - 1; j++) {
-                let a = values[j];
-                let b = values[j + 1];
-                if (a > b) {
-                  swap(values, j, j + 1);
-                }
-              }
-            } else {
-              console.log("finished");
-              p5.noLoop();
-            }
-
-            //we're on the jth rectangle
-            for (let j = 0; j < values.length; j++) {
-              if (j == values.length - i)
-              {
-                p5.fill('red');
-              }
-              else if (j > values.length - i - 1)
-              {
-                p5.fill('green');
-              }
-              else {
-                p5.fill('white');
-              }
-              p5.rect(fat * j, p5.height - values[j], fat, values[j]);
-            }
-            i++;
-					}}
+					draw={bubble_draw}
 				/>
       </div>
     );
