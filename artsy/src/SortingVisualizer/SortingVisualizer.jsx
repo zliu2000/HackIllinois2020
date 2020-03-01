@@ -24,11 +24,12 @@ export default class SortingVisualizer extends React.Component {
     this.handleHeap = this.handleHeap.bind(this);
     this.handleNew = this.handleNew.bind(this);
   }
+  //not really relevant w p5
 
   componentDidMount() {
     this.resetArray();
   }
-
+//not really relevant w p5
   resetArray() {
     const array = [];
     for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
@@ -38,15 +39,18 @@ export default class SortingVisualizer extends React.Component {
   }
 
   method = 0;
-  mergeSort() {
 
+  mergeSort() {
+    return ("mergeSort to be implemented!");
   }
   quickSort() {
-
+    return ("quickSort to be implemented!");
   }
+
   heapSort() {
-
+    return ("heapSort to be implemented!");
   }
+
   bubbleSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
     var values = [];
