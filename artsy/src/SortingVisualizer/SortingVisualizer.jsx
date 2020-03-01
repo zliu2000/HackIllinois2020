@@ -1,11 +1,6 @@
 import React from 'react';
 import './SortingVisualizer.css';
 import Sketch from "react-p5";
-import ReactDOM from 'react-dom';
-
-// Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 1;
-
 // Change this value for the number of bars (value) in the array.
 const NUMBER_OF_ARRAY_BARS = 310;
 
@@ -20,8 +15,14 @@ export default class SortingVisualizer extends React.Component {
     super(props);
 
     this.state = {
-      array: [],
+      methodid: 0
     };
+    // This binding is necessary to make `this` work in the callback
+    this.handleBubble = this.handleBubble.bind(this);
+    this.handleMerge = this.handleMerge.bind(this);
+    this.handleQuick = this.handleQuick.bind(this);
+    this.handleHeap = this.handleHeap.bind(this);
+    this.handleNew = this.handleNew.bind(this);
   }
 
   componentDidMount() {
@@ -35,46 +36,20 @@ export default class SortingVisualizer extends React.Component {
     }
     this.setState({array});
   }
-/*
-  mergeSort() {
-    const animations = getMergeSortAnimations(this.state.array);
-    for (let i = 0; i < animations.length; i++) {
-      const arrayBars = document.getElementsByClassName('array-bar');
-      const isColorChange = i % 3 !== 2;
-      if (isColorChange) {
-        const [barOneIdx, barTwoIdx] = animations[i];
-        const barOneStyle = arrayBars[barOneIdx].style;
-        const barTwoStyle = arrayBars[barTwoIdx].style;
-        const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-        setTimeout(() => {
-          barOneStyle.backgroundColor = color;
-          barTwoStyle.backgroundColor = color;
-        }, i * ANIMATION_SPEED_MS);
-      } else {
-        setTimeout(() => {
-          const [barOneIdx, newHeight] = animations[i];
-          const barOneStyle = arrayBars[barOneIdx].style;
-          barOneStyle.height = `${newHeight}px`;
-        }, i * ANIMATION_SPEED_MS);
-      }
-    }
-*/
+
   method = 0;
+  mergeSort() {
+
+  }
   quickSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
-  }
 
+  }
   heapSort() {
-    // We leave it as an exercise to the viewer of this code to implement this method.
-  }
 
-  bubbleSort() {
-    this.method = 4;
-    this.reload();
   }
-  bubbleDraw() {
+  bubbleSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
-    let values = [];
+    var values = [];
 
     let i = 0;
     let j = 0;
@@ -94,13 +69,13 @@ export default class SortingVisualizer extends React.Component {
       }
       //we're on the jth rectangle
       for (let j = 0; j < values.length; j++) {
-        if (j == values.length - i)
+        if (j === values.length - i)
         {
-          p5.fill('red');
+          p5.fill(SECONDARY_COLOR);
         }
         else if (j > values.length - i - 1)
         {
-          p5.fill('green');
+          p5.fill(PRIMARY_COLOR);
         }
         else {
           p5.fill('white');
@@ -153,34 +128,64 @@ export default class SortingVisualizer extends React.Component {
   }
   //runs sorting method vis. based on method id
   //0 for not chosen
-  //3 for bubblesort
-  runMethod() {
-    if (this.method == 0)
+  //4 for bubblesort
+  renderMethod(n) {
+    if (n === 0)
     {
       return ("Choose a sorting method!");
     }
-    if (this.method == 4)
+    if (n === 1)
     {
-      return this.bubbleDraw();
+      return this.mergeSort();
+    }
+    if (n === 2)
+    {
+      return this.quickSort();
+    }if (n === 3)
+    {
+      return this.heapSort();
+    }
+    if (n === 4)
+    {
+      return this.bubbleSort();
     }
     return ("Whoops!");
 
   }
-
+  handle(n) {
+    if (this.state.methodid !== n)
+    {
+      this.setState(state => ({
+        methodid: n
+      }))
+    }
+  }
+  handleNew() {
+    this.handle(0);
+  }
+  handleMerge() {
+    this.handle(1);
+  }
+  handleQuick() {
+    this.handle(2);
+  }
+  handleHeap() {
+    this.handle(3);
+  }
+  handleBubble() {
+    this.handle(4);
+  }
 
   render() {
     //https://stackoverflow.com/questions/10841239/enabling-refreshing-for-specific-html-elements-only
     return (
       <div className="array-container" id = "myDiv">
-        <button onClick={() => this.resetArray()}>Generate New Array</button>
-          <button onClick={() => this.mergeSort()}>Merge Sort</button>
-          <button onClick={() => this.quickSort()}>Quick Sort</button>
-          <button onClick={() => this.heapSort()}>Heap Sort</button>
-          <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-          <button onClick={() => this.testSortingAlgorithms()}>
-            Test Sorting Algorithms (BROKEN)
-          </button>
-          {() => this.runMethod()}
+          <button onClick={this.handleNew}>Generate New Array</button>
+          <button onClick={this.handleMerge}>Merge Sort</button>
+          <button onClick={this.handleQuick}>Quick Sort</button>
+          <button onClick={this.handleHeap}>Heap Sort</button>
+          <button onClick={this.handleBubble}>Bubble Sort</button>
+          {this.renderMethod(this.state.methodid)}
       </div>
 
     );
