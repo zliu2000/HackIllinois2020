@@ -3,7 +3,7 @@
 Algo Map5-
 
 ***CURENTLY ONLY BUBBLE SORT IS FUNCTIONAL***
-Built primarily centered around the open-source creative coding tool p5.js, Algo MAP5 is a sorting algorithm visualizer. Implemented using REACT and javascript, it is a simple tool that can built upon to better visualize and understand various sorting and other algorithmic concepts.
+Built primarily centered around the open-source creative coding tool p5.js, Algo MAP5 is an open-source sorting algorithm visualizer. Implemented using REACT and javascript, it is a simple tool that can built upon to better visualize and understand various sorting and other algorithmic concepts.
 
 ***FUTURE DEVELOPMENTS IN THE PROJECT***
 - polishing front end
