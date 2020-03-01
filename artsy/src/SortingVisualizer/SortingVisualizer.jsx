@@ -1,6 +1,8 @@
 import React from 'react';
 import {getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
 import './SortingVisualizer.css';
+import Sketch from "react-p5";
+import ReactDOM from 'react-dom';
 
 // Change this value for the speed of the animations.
 const ANIMATION_SPEED_MS = 1;
@@ -15,6 +17,20 @@ const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
 
 export default class SortingVisualizer extends React.Component {
+  setup = (p5, parentRef) => {
+						p5.createCanvas(200, 200).parent(parentRef);
+					};
+  draw = p5 => {
+						p5.background(0);
+						p5.fill(255, this.y * 1.3, 0);
+						p5.ellipse(p5.width / 2, this.y, 50);
+						if (this.y > p5.height) this.direction = '';
+						if (this.y < 0) {
+							this.direction = '^';
+						}
+						if (this.direction === '^') this.y += 8;
+						else this.y -= 4;
+					};
   constructor(props) {
     super(props);
 
@@ -86,7 +102,8 @@ export default class SortingVisualizer extends React.Component {
       console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
     }
   }
-
+  y = 0;
+	direction = '^';
   render() {
     const {array} = this.state;
 
@@ -109,6 +126,22 @@ export default class SortingVisualizer extends React.Component {
         <button onClick={() => this.testSortingAlgorithms()}>
           Test Sorting Algorithms (BROKEN)
         </button>
+        <Sketch
+					setup={(p5, parentRef) => {
+						p5.createCanvas(200, 200).parent(parentRef);
+					}}
+					draw={p5 => {
+						p5.background(0);
+						p5.fill(255, this.y * 1.3, 0);
+						p5.ellipse(p5.width / 2, this.y, 50);
+						if (this.y > p5.height) this.direction = '';
+						if (this.y < 0) {
+							this.direction = '^';
+						}
+						if (this.direction === '^') this.y += 8;
+						else this.y -= 4;
+					}}
+				/>
       </div>
     );
   }
