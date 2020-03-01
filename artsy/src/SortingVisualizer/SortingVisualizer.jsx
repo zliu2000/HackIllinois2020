@@ -16,20 +16,6 @@ const PRIMARY_COLOR = 'turquoise';
 const SECONDARY_COLOR = 'red';
 
 export default class SortingVisualizer extends React.Component {
-  setup = (p5, parentRef) => {
-						p5.createCanvas(200, 200).parent(parentRef);
-					};
-  draw = p5 => {
-						p5.background(0);
-						p5.fill(255, this.y * 1.3, 0);
-						p5.ellipse(p5.width / 2, this.y, 50);
-						if (this.y > p5.height) this.direction = '';
-						if (this.y < 0) {
-							this.direction = '^';
-						}
-						if (this.direction === '^') this.y += 8;
-						else this.y -= 4;
-					};
   constructor(props) {
     super(props);
 
@@ -73,6 +59,7 @@ export default class SortingVisualizer extends React.Component {
       }
     }
 */
+  method = 0;
   quickSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
@@ -82,6 +69,10 @@ export default class SortingVisualizer extends React.Component {
   }
 
   bubbleSort() {
+    this.method = 4;
+    this.reload();
+  }
+  bubbleDraw() {
     // We leave it as an exercise to the viewer of this code to implement this method.
     let values = [];
 
@@ -125,7 +116,6 @@ export default class SortingVisualizer extends React.Component {
     }
     let fat = 7.5;
     return (
-      <div className="array-container">
         <Sketch
 					setup={(p5, parentRef) => {
             p5.createCanvas(p5.windowWidth, p5.windowHeight);
@@ -137,7 +127,6 @@ export default class SortingVisualizer extends React.Component {
 					}}
 					draw={bubble_draw}
 				/>
-      </div>
     );
   }
 /*
@@ -157,61 +146,43 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 */
+  reload(){
+    var container = document.getElementById("myDiv");
+    var content = container.innerHTML;
+    container.innerHTML= content;
+  }
+  //runs sorting method vis. based on method id
+  //0 for not chosen
+  //3 for bubblesort
+  runMethod() {
+    if (this.method == 0)
+    {
+      return ("Choose a sorting method!");
+    }
+    if (this.method == 4)
+    {
+      return this.bubbleDraw();
+    }
+    return ("Whoops!");
+
+  }
 
 
   render() {
-    let values = [];
-
-    let i = 0;
-    let j = 0;
-    let bubble_draw = p5 => {
-      p5.background(0);
-      if (i < values.length) {
-        for (let j = 0; j < (values.length) - i - 1; j++) {
-          let a = values[j];
-          let b = values[j + 1];
-          if (a > b) {
-            swap(values, j, j + 1);
-          }
-        }
-      } else {
-        console.log("finished");
-        p5.noLoop();
-      }
-      //we're on the jth rectangle
-      for (let j = 0; j < values.length; j++) {
-        if (j == values.length - i)
-        {
-          p5.fill('red');
-        }
-        else if (j > values.length - i - 1)
-        {
-          p5.fill('green');
-        }
-        else {
-          p5.fill('white');
-        }
-        p5.rect(fat * j, p5.height - values[j], fat, values[j]);
-      }
-      i++;
-    };
-    function swap(arr, a, b) {
-      let temp = arr[a];
-      arr[a] = arr[b];
-      arr[b] = temp;
-    }
-    let fat = 7.5;
+    //https://stackoverflow.com/questions/10841239/enabling-refreshing-for-specific-html-elements-only
     return (
-      <div className="array-container">
-      <button onClick={() => this.resetArray()}>Generate New Array</button>
-      <button onClick={() => this.mergeSort()}>Merge Sort</button>
-      <button onClick={() => this.quickSort()}>Quick Sort</button>
-      <button onClick={() => this.heapSort()}>Heap Sort</button>
-      <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-      <button onClick={() => this.testSortingAlgorithms()}>
-        Test Sorting Algorithms (BROKEN)
-      </button>
+      <div className="array-container" id = "myDiv">
+        <button onClick={() => this.resetArray()}>Generate New Array</button>
+          <button onClick={() => this.mergeSort()}>Merge Sort</button>
+          <button onClick={() => this.quickSort()}>Quick Sort</button>
+          <button onClick={() => this.heapSort()}>Heap Sort</button>
+          <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+          <button onClick={() => this.testSortingAlgorithms()}>
+            Test Sorting Algorithms (BROKEN)
+          </button>
+          {() => this.runMethod()}
       </div>
+
     );
   }
 }
